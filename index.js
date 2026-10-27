@@ -29,3 +29,22 @@ async function fetchWeatherAlerts(state) {
   return response.json();
 }
 
+// Step 3: clear the input field every time the user fetches
+  stateInput.value = '';
+ 
+  try {
+    // Empty input is an error we catch ourselves, before calling the API
+    if (state === '') {
+      throw new Error('Please enter a state abbreviation.');
+    }
+ 
+    const data = await fetchWeatherAlerts(state);
+    clearError();
+    displayAlerts(data);
+  } catch (error) {
+    console.log(error.message);
+    showError(error.message);
+  }
+}
+ 
+fetchButton.addEventListener('click', handleFetchClick);
