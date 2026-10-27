@@ -28,6 +28,42 @@ async function fetchWeatherAlerts(state) {
  
   return response.json();
 }
+// Step 2: show the summary and the list of headlines on the page
+function displayAlerts(data) {
+  // Remove anything left over from the previous request
+  alertsDisplay.textContent = '';
+ 
+  // Summary line, e.g. "Current watches, warnings, and advisories for Minnesota: 11"
+  const summary = document.createElement('p');
+  summary.textContent = `${data.title}: ${data.features.length}`;
+  alertsDisplay.appendChild(summary);
+ 
+  // One list item per alert headline
+  const list = document.createElement('ul');
+  data.features.forEach((alert) => {
+    const item = document.createElement('li');
+    item.textContent = alert.properties.headline;
+    list.appendChild(item);
+  });
+  alertsDisplay.appendChild(list);
+}
+ 
+// Step 4: show an error message in the dedicated div
+function showError(message) {
+  alertsDisplay.textContent = '';
+  errorMessage.textContent = message;
+  errorMessage.classList.remove('hidden');
+}
+ 
+// Step 4: hide the error div and clear its text
+function clearError() {
+  errorMessage.textContent = '';
+  errorMessage.classList.add('hidden');
+}
+ 
+// Runs when the "Get Weather Alerts" button is clicked
+async function handleFetchClick() {
+  const state = stateInput.value.trim();
 
 // Step 3: clear the input field every time the user fetches
   stateInput.value = '';
